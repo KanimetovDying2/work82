@@ -1,0 +1,4 @@
+api/node_modules/
+api/public/uploads/
+api/.env
+api/dist/
