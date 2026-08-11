@@ -1,7 +1,9 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-//tut dobavly route importi
+import artistsRouter from "./routes/Artists.js";
+import albumsRouter from "./routes/Albums.js";
+import tracksRouter from "./routes/Tracks.js";
 
 const app = express();
 const port = 3000;
@@ -10,8 +12,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
-//tut route roditelski
-app.use("/");
+app.use(artistsRouter);
+app.use(albumsRouter);
+app.use(tracksRouter);
 
 const run = async () => {
   await mongoose.connect("mongodb://localhost/requratedb");
