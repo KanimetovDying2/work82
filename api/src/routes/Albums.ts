@@ -47,13 +47,13 @@ albumsRouter.post("/albums", upload.single("photo"), async (req, res) => {
 
 albumsRouter.get("/albums/:id", async (req, res) => {
   try {
-    const userParam = req.params.id;
+    const albumId = req.params.id;
 
-    if (!userParam) {
+    if (!albumId) {
       return res.status(404).json({ message: "Album not found!" });
     }
 
-    const foundAlbum = await Album.findById(userParam).populate("artist");
+    const foundAlbum = await Album.findById(albumId).populate("artist");
     return res.json({ foundAlbum });
   } catch (e) {
     console.error(e);
