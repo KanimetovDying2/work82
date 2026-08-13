@@ -20,7 +20,7 @@ artistsRouter.post("/artists", upload.single("photo"), async (req, res) => {
     const { name, info } = req.body;
     const photo = req.file ? req.file.filename : null;
 
-    if (!name) {
+    if (!name || typeof name !== "string" || name.trim() === "") {
       return res.status(400).json({ message: "Name is required!" });
     }
 

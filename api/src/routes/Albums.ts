@@ -25,7 +25,13 @@ albumsRouter.post("/albums", upload.single("photo"), async (req, res) => {
     const { name, artist, year } = req.body;
     const photo = req.file ? req.file.filename : null;
 
-    if (!name || !artist || !year) {
+    if (
+      !name ||
+      typeof name !== "string" ||
+      name.trim() === "" ||
+      !artist ||
+      !year
+    ) {
       return res
         .status(400)
         .json({ message: "Name, artist and year are required!" });

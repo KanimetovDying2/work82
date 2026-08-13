@@ -32,9 +32,15 @@ tracksRouter.get("/tracks", async (req, res) => {
 
 tracksRouter.post("/tracks", async (req, res) => {
   try {
-    const { name, album, duration, trackNumber } = req.body;
+    const { name, album, duration } = req.body;
 
-    if (!name || !album || !duration || trackNumber === undefined) {
+    if (
+      !name ||
+      typeof name !== "string" ||
+      name.trim() === "" ||
+      !album ||
+      !duration
+    ) {
       return res.status(400).json({ message: "All fields are required!" });
     }
 
@@ -42,7 +48,6 @@ tracksRouter.post("/tracks", async (req, res) => {
       name,
       album,
       duration,
-      trackNumber,
     });
 
     await newTrack.save();
