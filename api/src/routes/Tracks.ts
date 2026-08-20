@@ -21,7 +21,7 @@ tracksRouter.get("/tracks", async (req, res) => {
       filter.album = { $in: albumsId };
     }
 
-    const tracksData = await Track.find(filter);
+    const tracksData = await Track.find(filter).sort({ number: 1 });
 
     return res.json({ tracksData });
   } catch (e) {
@@ -32,14 +32,15 @@ tracksRouter.get("/tracks", async (req, res) => {
 
 tracksRouter.post("/tracks", async (req, res) => {
   try {
-    const { name, album, duration } = req.body;
+    const { name, album, duration, number } = req.body;
 
     if (
       !name ||
       typeof name !== "string" ||
       name.trim() === "" ||
       !album ||
-      !duration
+      !duration ||
+      !number === undefined
     ) {
       return res.status(400).json({ message: "All fields are required!" });
     }
@@ -48,6 +49,7 @@ tracksRouter.post("/tracks", async (req, res) => {
       name,
       album,
       duration,
+      number,
     });
 
     await newTrack.save();
