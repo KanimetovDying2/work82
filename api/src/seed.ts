@@ -48,26 +48,26 @@ const run = async () => {
       name: "CHELSEA 3",
       artist: artist1._id,
       year: 2022,
-      photo: "chelsea3.jpg",
+      photo: "chelsea3.png",
     }),
 
     Album.create({
       name: "KIDSCRY2DAY",
       artist: artist2._id,
       year: 2026,
-      photo: "kidscry2day.jpg",
+      photo: "kidscry2day.png",
     }),
     Album.create({
       name: "#pharaohseason",
       artist: artist2._id,
       year: 2024,
-      photo: "pharaohseason.jpg",
+      photo: "pharaohseason.png",
     }),
   ]);
 
   const tracksData = [
     { name: "Моя вина!", album: album1._id, duration: "3:05", number: 1 },
-    { name: "Умираю2", album: album1._id, duration: "2:37", number: 2 },
+    { name: "Умираю 2!", album: album1._id, duration: "2:37", number: 2 },
     { name: "Железо", album: album1._id, duration: "3:29", number: 3 },
     { name: "Тело", album: album1._id, duration: "3:04", number: 4 },
     { name: "Тысяча глаз", album: album1._id, duration: "3:09", number: 5 },
