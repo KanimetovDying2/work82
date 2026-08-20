@@ -40,13 +40,15 @@ const TracksPage: React.FC = () => {
   if (!album) {
     return (
       <div className="text-center py-20">
-        <h2 className="text-2xl font-bold text-white mb-2">Album not found</h2>
-        <p className="text-gray-400 mb-6">
+        <h2 className="text-2xl font-bold text-white mb-2 tracking-tight">
+          Album not found
+        </h2>
+        <p className="text-zinc-400 mb-6 text-sm font-mono">
           The album you are looking for does not exist or was removed.
         </p>
         <Link
           to="/"
-          className="text-indigo-400 hover:text-indigo-300 transition-colors inline-flex items-center gap-1"
+          className="text-white hover:text-zinc-300 transition-colors inline-flex items-center gap-1 font-mono text-sm underline underline-offset-4"
         >
           &larr; Back to Home
         </Link>
@@ -63,12 +65,12 @@ const TracksPage: React.FC = () => {
       <div className="mb-6">
         <Link
           to={`/artists/${artistId}`}
-          className="text-sm text-indigo-400 hover:text-indigo-300 transition-colors inline-flex items-center gap-1 mb-4"
+          className="text-sm text-zinc-400 hover:text-white transition-colors inline-flex items-center gap-1 mb-4 font-mono"
         >
           &larr; Back to Albums
         </Link>
 
-        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 bg-gray-900 border border-gray-800 p-6 rounded-2xl">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 bg-zinc-950 border border-zinc-800 p-6 rounded-2xl shadow-lg">
           <img
             src={
               album?.photo
@@ -76,18 +78,19 @@ const TracksPage: React.FC = () => {
                 : "https://via.placeholder.com/300?text=No+Cover"
             }
             alt={album?.name}
-            className="w-40 h-40 rounded-xl object-cover border border-gray-700 shadow-md"
+            className="w-40 h-40 rounded-xl object-cover border border-zinc-800 shadow-md"
           />
           <div className="text-center sm:text-left flex-1">
-            <span className="text-xs uppercase tracking-wider text-indigo-400 font-semibold bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">
+            <span className="text-xs uppercase tracking-wider text-zinc-300 font-semibold bg-zinc-900 px-3 py-1 rounded-full border border-zinc-800 font-mono">
               Album &bull; {album?.year}
             </span>
-            <h1 className="text-3xl font-extrabold text-white mt-2">
+            <h1 className="text-3xl font-extrabold text-white mt-3 tracking-tight">
               {album?.name}
             </h1>
             {artist && (
-              <p className="text-gray-400 text-lg font-medium mt-1">
-                Artist: <span className="text-white">{artist.name}</span>
+              <p className="text-zinc-400 text-base font-medium mt-1">
+                Artist:{" "}
+                <span className="text-white font-semibold">{artist.name}</span>
               </p>
             )}
           </div>
@@ -95,28 +98,28 @@ const TracksPage: React.FC = () => {
       </div>
 
       <div className="mb-4">
-        <h2 className="text-2xl font-bold text-white">Tracks</h2>
+        <h2 className="text-2xl font-bold text-white tracking-tight">Tracks</h2>
       </div>
 
       {tracks.length === 0 ? (
-        <p className="text-gray-400 text-center py-10">
+        <p className="text-zinc-500 text-center py-10 font-mono">
           No tracks found for this album.
         </p>
       ) : (
-        <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden shadow-lg">
-          <div className="divide-y divide-gray-800">
+        <div className="bg-zinc-950 border border-zinc-800 rounded-xl overflow-hidden shadow-lg">
+          <div className="divide-y divide-zinc-900">
             {tracks.map((track) => (
               <div
                 key={track._id}
-                className="px-6 py-4 flex items-center justify-between hover:bg-gray-800/50 transition-colors"
+                className="px-6 py-4 flex items-center justify-between hover:bg-zinc-900/50 transition-colors"
               >
                 <div className="flex items-center gap-4">
-                  <span className="text-gray-500 font-mono w-6 text-right">
+                  <span className="text-zinc-500 font-mono w-6 text-right">
                     {track.number}.
                   </span>
                   <span className="text-white font-medium">{track.name}</span>
                 </div>
-                <span className="text-sm text-gray-400 font-mono">
+                <span className="text-sm text-zinc-400 font-mono">
                   {track.duration}
                 </span>
               </div>

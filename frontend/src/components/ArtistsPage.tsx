@@ -32,8 +32,8 @@ const ArtistsPage: React.FC = () => {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-extrabold text-white">Artists</h1>
-        <p className="text-gray-400 mt-1">
+        <h1 className="text-3xl font-extrabold text-white tracking-tight">Artists</h1>
+        <p className="text-zinc-400 mt-1 text-sm font-mono">
           Select an artist to view their albums
         </p>
       </div>

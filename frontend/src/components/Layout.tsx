@@ -3,16 +3,16 @@ import { Link, Outlet } from "react-router-dom";
 
 const Layout: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col">
-      <header className="bg-gray-900 border-b border-gray-800 shadow-md sticky top-0 z-50">
+    <div className="min-h-screen bg-black text-zinc-100 flex flex-col selection:bg-white selection:text-black">
+      <header className="bg-zinc-950 border-b border-zinc-800 shadow-md sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
           <Link
             to="/"
-            className="text-2xl font-extrabold tracking-wide text-indigo-400 hover:text-indigo-300 transition-colors"
+            className="text-2xl font-light tracking-wide text-white hover:text-zinc-300 transition-colors"
           >
             RequRate
           </Link>
-          <span className="text-sm text-gray-400 bg-gray-800 px-3 py-1 rounded-full border border-gray-700">
+          <span className="text-xs font-mono text-zinc-400 bg-zinc-900 px-3 py-1 rounded-full border border-zinc-800 tracking-wider uppercase">
             The only place with the raw truth about music.
           </span>
         </div>
@@ -22,7 +22,7 @@ const Layout: React.FC = () => {
         <Outlet />
       </main>
 
-      <footer className="bg-gray-900 border-t border-gray-800 text-center py-4 text-sm text-gray-500">
+      <footer className="bg-zinc-950 border-t border-zinc-800 text-center py-4 text-xs font-mono text-zinc-500">
         Requrate &bull; 2026
       </footer>
     </div>
