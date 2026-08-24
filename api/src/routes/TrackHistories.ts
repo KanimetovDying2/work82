@@ -1,34 +1,71 @@
 import { Router } from "express";
 import { TrackHistory } from "../models/TrackHistory.js";
-import { User } from "../models/User.js";
+import { Track } from "../models/Track.js";
+import { Album } from "../models/Album.js";
+import { auth } from "../middleware/auth.js";
+import { RequestWithUser } from "../types.js";
 
 const tracksHistories = Router();
 
-tracksHistories.post("/track_history", async (req, res) => {
-  const token = req.get("Authorization");
+tracksHistories.post(
+  "/track_histories",
+  auth,
+  async (req: RequestWithUser, res, next) => {
+    try {
+      if (!req.user) {
+        return res.status(401).send({ error: "Unauthorized" });
+      }
 
-  if (!token) {
-    return res.status(401).send({ error: "No token present" });
-  }
+      const { track: trackId } = req.body;
 
-  const user = await User.findOne({ token });
+      if (!trackId) {
+        return res.status(400).send({ error: "Track id is required" });
+      }
 
-  if (!user) {
-    return res.status(401).send({ error: "Wrong token" });
-  }
+      const track = await Track.findById(trackId);
+      if (!track) {
+        return res.status(404).send({ error: "Track not found" });
+      }
 
-  try {
-    const trackHistory = new TrackHistory({
-      user: user._id,
-      track: req.body.track,
-      datetime: new Date(),
-    });
+      const album = await Album.findById(track.album);
+      if (!album) {
+        return res.status(404).send({ error: "Album not found" });
+      }
 
-    await trackHistory.save();
-    return res.send(trackHistory);
-  } catch (e) {
-    return res.status(400).send(e);
-  }
-});
+      const trackHistory = new TrackHistory({
+        user: req.user._id,
+        track: trackId,
+        artist: album.artist,
+        datetime: new Date(),
+      });
+
+      await trackHistory.save();
+      return res.status(201).send(trackHistory);
+    } catch (e) {
+      return next(e);
+    }
+  },
+);
+
+tracksHistories.get(
+  "/track_histories",
+  auth,
+  async (req: RequestWithUser, res, next) => {
+    try {
+      if (!req.user) {
+        return res.status(401).send({ error: "Unauthorized" });
+      }
+
+      const histories = await TrackHistory.find({ user: req.user._id })
+        .populate("track")
+        .populate("artist")
+        .sort({ datetime: -1 });
+
+      return res.send(histories);
+    } catch (e) {
+      return next(e);
+    }
+  },
+);
 
 export default tracksHistories;

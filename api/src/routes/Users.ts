@@ -5,7 +5,7 @@ import { randomUUID } from "crypto";
 
 const usersRouter = Router();
 
-usersRouter.post("/users", async (req, res) => {
+usersRouter.post("/users", async (req, res, next) => {
   try {
     const user = new User({
       username: req.body.username,
@@ -13,17 +13,17 @@ usersRouter.post("/users", async (req, res) => {
       token: randomUUID(),
     });
     await user.save();
-    return res.send(user);
+    return res.status(201).send(user);
   } catch (e) {
-    return res.status(400).json({ message: "Error, wrong request" });
+    return next(e);
   }
 });
 
-usersRouter.post("/users/sessions", async (req, res) => {
+usersRouter.post("/users/sessions", async (req, res, next) => {
   try {
     const user = await User.findOne({ username: req.body.username });
     if (!user) {
-      return res.status(401).send({ error: "Error, username not found" });
+      return res.status(401).send({ error: "Username not found" });
     }
 
     const isMatch = await bcrypt.compare(req.body.password, user.password);
@@ -34,9 +34,9 @@ usersRouter.post("/users/sessions", async (req, res) => {
     user.token = randomUUID();
     await user.save();
 
-    return res.send({ message: "Login success", token: user.token });
+    return res.send({ message: "Login success", token: user.token, user });
   } catch (e) {
-    return res.status(500).send(e);
+    return next(e);
   }
 });
 
