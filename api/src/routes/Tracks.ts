@@ -40,7 +40,7 @@ tracksRouter.post("/tracks", async (req, res) => {
       name.trim() === "" ||
       !album ||
       !duration ||
-      !number === undefined
+      number === undefined
     ) {
       return res.status(400).json({ message: "All fields are required!" });
     }
@@ -53,7 +53,7 @@ tracksRouter.post("/tracks", async (req, res) => {
     });
 
     await newTrack.save();
-    return res.json(newTrack);
+    return res.status(201).json(newTrack); 
   } catch (e) {
     console.error(e);
     return res.status(500).json({ message: "Backend post error." });

@@ -1,20 +1,70 @@
 import React from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { logoutUser } from "../store/usersSlice";
 
 const Layout: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const user = useAppSelector((state) => state.users.user);
+
+  const handleLogout = async () => {
+    await dispatch(logoutUser());
+    navigate("/login");
+  };
+
   return (
     <div className="min-h-screen bg-black text-zinc-100 flex flex-col selection:bg-white selection:text-black">
       <header className="bg-zinc-950 border-b border-zinc-800 shadow-md sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-          <Link
-            to="/"
-            className="text-2xl font-light tracking-wide text-white hover:text-zinc-300 transition-colors"
-          >
-            RequRate
-          </Link>
-          <span className="text-xs font-mono text-zinc-400 bg-zinc-900 px-3 py-1 rounded-full border border-zinc-800 tracking-wider uppercase">
-            The only place with the raw truth about music.
-          </span>
+          <div className="flex flex-col gap-1">
+            <Link
+              to="/"
+              className="text-2xl font-light tracking-wide text-white hover:text-zinc-300 transition-colors"
+            >
+              RequRate
+            </Link>
+            <span className="text-[10px] font-mono text-zinc-400 tracking-wider uppercase">
+              The only place with the raw truth about music.
+            </span>
+          </div>
+
+          <div className="flex items-center gap-4">
+            {user ? (
+              <>
+                <Link
+                  to="/track_histories"
+                  className="text-sm font-mono text-zinc-300 hover:text-white transition-colors bg-zinc-900 px-3 py-1.5 rounded-lg border border-zinc-800"
+                >
+                  Track History
+                </Link>
+                <span className="text-sm text-zinc-400 font-mono">
+                  Hello, <strong className="text-white">{user.username}</strong>
+                </span>
+                <button
+                  onClick={handleLogout}
+                  className="text-sm font-mono bg-zinc-800 hover:bg-zinc-700 text-white px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="text-sm font-mono text-zinc-300 hover:text-white transition-colors px-3 py-1.5"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/register"
+                  className="text-sm font-mono bg-white text-black hover:bg-zinc-200 px-3 py-1.5 rounded-lg transition-colors font-semibold"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
+          </div>
         </div>
       </header>
 

@@ -3,12 +3,23 @@ import { useParams, Link } from "react-router-dom";
 import axiosApi from "../api/axiosApi";
 import type { Album, Artist, Track } from "../types";
 import Spinner from "../components/Spinner";
+import { useAppSelector } from "../store/hooks";
+import YouTubeModal from "./YoutubeModal";
+
+const getYouTubeVideoId = (url: string) => {
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  return match && match[2].length === 11 ? match[2] : null;
+};
 
 const TracksPage: React.FC = () => {
   const { albumId } = useParams<{ albumId: string }>();
+  const user = useAppSelector((state) => state.users.user);
   const [album, setAlbum] = useState<Album | null>(null);
   const [tracks, setTracks] = useState<Track[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [playingTrackId, setPlayingTrackId] = useState<string | null>(null);
+  const [activeVideoId, setActiveVideoId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchAlbumData = async () => {
@@ -33,6 +44,25 @@ const TracksPage: React.FC = () => {
     fetchAlbumData();
   }, [albumId]);
 
+  const handlePlay = async (track: Track) => {
+    if (!user) return;
+    try {
+      setPlayingTrackId(track._id);
+      await axiosApi.post("/track_histories", { track: track._id });
+    } catch (e) {
+      console.error("Failed to add track to history:", e);
+    } finally {
+      setTimeout(() => setPlayingTrackId(null), 500);
+    }
+
+    if (track.youtubeUrl) {
+      const videoId = getYouTubeVideoId(track.youtubeUrl);
+      if (videoId) {
+        setActiveVideoId(videoId);
+      }
+    }
+  };
+
   if (loading) {
     return <Spinner />;
   }
@@ -40,16 +70,8 @@ const TracksPage: React.FC = () => {
   if (!album) {
     return (
       <div className="text-center py-20">
-        <h2 className="text-2xl font-bold text-white mb-2 tracking-tight">
-          Album not found
-        </h2>
-        <p className="text-zinc-400 mb-6 text-sm font-mono">
-          The album you are looking for does not exist or was removed.
-        </p>
-        <Link
-          to="/"
-          className="text-white hover:text-zinc-300 transition-colors inline-flex items-center gap-1 font-mono text-sm underline underline-offset-4"
-        >
+        <h2 className="text-2xl font-bold text-white mb-2">Album not found</h2>
+        <Link to="/" className="text-white underline font-mono text-sm">
           &larr; Back to Home
         </Link>
       </div>
@@ -119,14 +141,31 @@ const TracksPage: React.FC = () => {
                   </span>
                   <span className="text-white font-medium">{track.name}</span>
                 </div>
-                <span className="text-sm text-zinc-400 font-mono">
-                  {track.duration}
-                </span>
+                <div className="flex items-center gap-4">
+                  <span className="text-sm text-zinc-400 font-mono">
+                    {track.duration}
+                  </span>
+                  {user && (
+                    <button
+                      onClick={() => handlePlay(track)}
+                      disabled={playingTrackId === track._id}
+                      className="bg-white text-black text-xs font-bold px-4 py-1.5 rounded-full hover:bg-zinc-200 transition-colors cursor-pointer disabled:opacity-50"
+                    >
+                      {playingTrackId === track._id ? "Playing..." : "Play"}
+                    </button>
+                  )}
+                </div>
               </div>
             ))}
           </div>
         </div>
       )}
+
+      <YouTubeModal
+        isOpen={Boolean(activeVideoId)}
+        onClose={() => setActiveVideoId(null)}
+        videoId={activeVideoId || ""}
+      />
     </div>
   );
 };

@@ -18,6 +18,10 @@ const TrackSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  youtubeUrl: {
+    type: String,
+    default: null,
+  },
 });
 
 export const Track = mongoose.model("Track", TrackSchema);

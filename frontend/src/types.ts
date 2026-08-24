@@ -19,4 +19,37 @@ export interface Track {
   album: string;
   duration: string;
   number: number;
+  youtubeUrl?: string | null;
+}
+
+export interface User {
+  _id: string;
+  username: string;
+  token: string;
+}
+
+export interface RegisterMutation {
+  username: string;
+  password: string;
+}
+
+export interface LoginMutation {
+  username: string;
+  password: string;
+}
+
+export interface ValidationError {
+  message?: string;
+  error?: string;
+  errors?: {
+    [key: string]: { message: string };
+  };
+}
+
+export interface TrackHistoryItem {
+  _id: string;
+  user: string;
+  track: Track;
+  artist: Artist;
+  datetime: string;
 }
