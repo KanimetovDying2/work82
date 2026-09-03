@@ -14,6 +14,16 @@ const ArtistSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+  isPublished: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
 });
 
 export const Artist = mongoose.model("Artist", ArtistSchema);

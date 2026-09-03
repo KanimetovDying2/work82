@@ -5,6 +5,7 @@ export interface UserFields {
   username: string;
   password: string;
   token: string;
+  role: "admin" | "user";
 }
 
 export type UserWithoutId = Omit<UserFields, "token">;
