@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { registerUser, loginUser } from "../store/usersSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { registerUser, loginUser } from "../../store/usersSlice";
 
 const RegisterPage: React.FC = () => {
   const dispatch = useAppDispatch();

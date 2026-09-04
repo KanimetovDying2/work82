@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosApi from "../api/axiosApi";
-import { useAppSelector } from "../store/hooks";
-import type { TrackHistoryItem } from "../types";
-import Spinner from "./Spinner";
+import axiosApi from "../../api/axiosApi";
+import { useAppSelector } from "../../store/hooks";
+import type { TrackHistoryItem } from "../../types";
+import Spinner from "../Spinner";
 
 const TrackHistoryPage: React.FC = () => {
   const navigate = useNavigate();

@@ -1,15 +1,15 @@
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
-import ArtistsPage from "./components/ArtistsPage";
-import TracksPage from "./components/TracksPage";
-import AlbumsPage from "./components/AlbumPage";
-import LoginPage from "./components/LoginPage";
-import RegisterPage from "./components/RegisterPage";
-import TrackHistoryPage from "./components/TrackHistoryPage";
-import NewArtistPage from "./components/NewArtistPage";
-import NewAlbumPage from "./components/NewAlbumPage";
-import NewTrackPage from "./components/NewTrackPage";
-import NotFoundPage from "./components/NotFoundPage";
+import ArtistsPage from "./components/pages/ArtistsPage";
+import TracksPage from "./components/trackspage/TracksPage";
+import AlbumsPage from "./components/pages/AlbumPage";
+import LoginPage from "./components/pages/LoginPage";
+import RegisterPage from "./components/pages/RegisterPage";
+import TrackHistoryPage from "./components/pages/TrackHistoryPage";
+import NewArtistPage from "./components/pages/new/NewArtistPage";
+import NewAlbumPage from "./components/pages/new/NewAlbumPage";
+import NewTrackPage from "./components/pages/new/NewTrackPage";
+import NotFoundPage from "./components/pages/NotFoundPage";
 
 const App = () => {
   return (

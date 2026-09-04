@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import axiosApi from "../api/axiosApi";
-import type { Album, Artist } from "../types";
-import AlbumCard from "../components/AlbumCard";
-import Spinner from "../components/Spinner";
+import axiosApi from "../../api/axiosApi";
+import type { Album, Artist } from "../../types";
+import AlbumCard from "../AlbumCard";
+import Spinner from "../Spinner";
 
 const AlbumsPage: React.FC = () => {
   const { artistId } = useParams<{ artistId: string }>();

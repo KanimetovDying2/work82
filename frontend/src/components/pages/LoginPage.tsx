@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { loginUser } from "../store/usersSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { loginUser } from "../../store/usersSlice";
 
 const LoginPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -20,8 +20,7 @@ const LoginPage: React.FC = () => {
     try {
       await dispatch(loginUser(state)).unwrap();
       navigate("/");
-    } catch {
-    }
+    } catch {}
   };
 
   return (

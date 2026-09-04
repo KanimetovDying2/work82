@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosApi from "../api/axiosApi";
-import type { Artist, Album } from "../types";
+import axiosApi from "../../../api/axiosApi";
+import type { Artist, Album } from "../../../types";
 
 const NewTrackPage: React.FC = () => {
   const navigate = useNavigate();
