@@ -19,6 +19,8 @@ const AlbumCard: React.FC<Props> = ({ album }) => {
     user &&
     (user.role === "admin" || (!album.isPublished && album.user === user._id));
 
+  const canPublish = user?.role === "admin" && !album.isPublished;
+
   const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
@@ -27,6 +29,17 @@ const AlbumCard: React.FC<Props> = ({ album }) => {
       window.location.reload();
     } catch (error) {
       console.error("Delete album failed:", error);
+    }
+  };
+
+  const handlePublish = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    try {
+      await axiosApi.patch(`/albums/${album._id}/togglePublished`);
+      window.location.reload();
+    } catch (error) {
+      console.error("Publish album failed:", error);
     }
   };
 
@@ -69,14 +82,25 @@ const AlbumCard: React.FC<Props> = ({ album }) => {
         </div>
       </Link>
 
-      {canDelete && (
-        <button
-          onClick={handleDelete}
-          className="absolute top-3 right-3 bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-3 py-1.5 rounded"
-        >
-          Delete
-        </button>
-      )}
+      <div className="absolute top-3 right-3 flex gap-2">
+        {canPublish && (
+          <button
+            onClick={handlePublish}
+            className="bg-green-600 hover:bg-green-700 text-white text-xs font-bold px-3 py-1.5 rounded"
+          >
+            Publish
+          </button>
+        )}
+
+        {canDelete && (
+          <button
+            onClick={handleDelete}
+            className="bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-3 py-1.5 rounded"
+          >
+            Delete
+          </button>
+        )}
+      </div>
     </div>
   );
 };

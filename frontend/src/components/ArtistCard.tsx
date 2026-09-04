@@ -20,6 +20,8 @@ const ArtistCard: React.FC<Props> = ({ artist }) => {
     (user.role === "admin" ||
       (!artist.isPublished && artist.user === user._id));
 
+  const canPublish = user?.role === "admin" && !artist.isPublished;
+
   const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
@@ -28,6 +30,17 @@ const ArtistCard: React.FC<Props> = ({ artist }) => {
       window.location.reload();
     } catch (error) {
       console.error("Delete artist failed:", error);
+    }
+  };
+
+  const handlePublish = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    try {
+      await axiosApi.patch(`/artists/${artist._id}/togglePublished`);
+      window.location.reload();
+    } catch (error) {
+      console.error("Publish artist failed:", error);
     }
   };
 
@@ -64,14 +77,25 @@ const ArtistCard: React.FC<Props> = ({ artist }) => {
         </div>
       </Link>
 
-      {canDelete && (
-        <button
-          onClick={handleDelete}
-          className="absolute top-3 right-3 bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-3 py-1.5 rounded"
-        >
-          Delete
-        </button>
-      )}
+      <div className="absolute top-3 right-3 flex gap-2">
+        {canPublish && (
+          <button
+            onClick={handlePublish}
+            className="bg-green-600 hover:bg-green-700 text-white text-xs font-bold px-3 py-1.5 rounded"
+          >
+            Publish
+          </button>
+        )}
+
+        {canDelete && (
+          <button
+            onClick={handleDelete}
+            className="bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-3 py-1.5 rounded"
+          >
+            Delete
+          </button>
+        )}
+      </div>
     </div>
   );
 };

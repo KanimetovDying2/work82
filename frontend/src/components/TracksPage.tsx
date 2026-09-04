@@ -89,6 +89,20 @@ const TracksPage: React.FC = () => {
     }
   };
 
+  const handlePublishTrack = async (id: string) => {
+    try {
+      await axiosApi.patch(`/tracks/${id}/togglePublished`);
+
+      setTracks((prev) =>
+        prev.map((track) =>
+          track._id === id ? { ...track, isPublished: true } : track,
+        ),
+      );
+    } catch (e) {
+      console.error("Publish track failed:", e);
+    }
+  };
+
   if (loading) {
     return <Spinner />;
   }
@@ -192,6 +206,15 @@ const TracksPage: React.FC = () => {
                       className="bg-white text-black text-xs font-bold px-4 py-1.5 rounded-full hover:bg-zinc-200 transition-colors cursor-pointer disabled:opacity-50"
                     >
                       {playingTrackId === track._id ? "Playing..." : "Play"}
+                    </button>
+                  )}
+
+                  {user?.role === "admin" && !track.isPublished && (
+                    <button
+                      onClick={() => handlePublishTrack(track._id)}
+                      className="bg-green-600 hover:bg-green-700 text-white text-xs font-bold px-3 py-1.5 rounded"
+                    >
+                      Publish
                     </button>
                   )}
 
