@@ -71,8 +71,7 @@ export const loginUser = createAsyncThunk<
 });
 
 export const logoutUser = createAsyncThunk("users/logout", async () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("user");
+  await axiosApi.delete("/users/sessions");
 });
 
 export const usersSlice = createSlice({

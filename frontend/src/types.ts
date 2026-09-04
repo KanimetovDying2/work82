@@ -3,6 +3,8 @@ export interface Artist {
   name: string;
   photo: string | null;
   info: string | null;
+  isPublished: boolean;
+  user: string;
 }
 
 export interface Album {
@@ -11,6 +13,8 @@ export interface Album {
   artist: Artist | string;
   year: number;
   photo: string | null;
+  isPublished: boolean;
+  user: string;
 }
 
 export interface Track {
@@ -20,12 +24,14 @@ export interface Track {
   duration: string;
   number: number;
   youtubeUrl?: string | null;
+  isPublished: boolean;
+  user: string;
 }
 
 export interface User {
   _id: string;
   username: string;
-  token: string;
+  role: "user" | "admin";
 }
 
 export interface RegisterMutation {

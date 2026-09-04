@@ -8,16 +8,21 @@ import YouTubeModal from "./YoutubeModal";
 
 const getYouTubeVideoId = (url: string) => {
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+
   const match = url.match(regExp);
+
   return match && match[2].length === 11 ? match[2] : null;
 };
 
 const TracksPage: React.FC = () => {
   const { albumId } = useParams<{ albumId: string }>();
+
   const user = useAppSelector((state) => state.users.user);
+
   const [album, setAlbum] = useState<Album | null>(null);
   const [tracks, setTracks] = useState<Track[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+
   const [playingTrackId, setPlayingTrackId] = useState<string | null>(null);
   const [activeVideoId, setActiveVideoId] = useState<string | null>(null);
 
@@ -27,11 +32,13 @@ const TracksPage: React.FC = () => {
         const albumResponse = await axiosApi.get<{ foundAlbum: Album }>(
           `/albums/${albumId}`,
         );
+
         setAlbum(albumResponse.data.foundAlbum);
 
         const tracksResponse = await axiosApi.get<{ tracksData: Track[] }>(
           `/tracks?album=${albumId}`,
         );
+
         setTracks(tracksResponse.data.tracksData);
       } catch (e) {
         console.error("Failed to fetch album details:", e);
@@ -46,20 +53,39 @@ const TracksPage: React.FC = () => {
 
   const handlePlay = async (track: Track) => {
     if (!user) return;
+
     try {
       setPlayingTrackId(track._id);
-      await axiosApi.post("/track_histories", { track: track._id });
+
+      await axiosApi.post("/track_histories", {
+        track: track._id,
+      });
     } catch (e) {
       console.error("Failed to add track to history:", e);
     } finally {
-      setTimeout(() => setPlayingTrackId(null), 500);
+      setTimeout(() => {
+        setPlayingTrackId(null);
+      }, 500);
     }
 
     if (track.youtubeUrl) {
       const videoId = getYouTubeVideoId(track.youtubeUrl);
+
       if (videoId) {
         setActiveVideoId(videoId);
       }
+    }
+  };
+
+  const handleDeleteTrack = async (id: string) => {
+    if (!window.confirm("Delete this track?")) return;
+
+    try {
+      await axiosApi.delete(`/tracks/${id}`);
+
+      setTracks((prev) => prev.filter((track) => track._id !== id));
+    } catch (e) {
+      console.error("Delete track failed:", e);
     }
   };
 
@@ -71,6 +97,7 @@ const TracksPage: React.FC = () => {
     return (
       <div className="text-center py-20">
         <h2 className="text-2xl font-bold text-white mb-2">Album not found</h2>
+
         <Link to="/" className="text-white underline font-mono text-sm">
           &larr; Back to Home
         </Link>
@@ -79,7 +106,8 @@ const TracksPage: React.FC = () => {
   }
 
   const artist =
-    album && typeof album.artist === "object" ? (album.artist as Artist) : null;
+    typeof album.artist === "object" ? (album.artist as Artist) : null;
+
   const artistId = artist ? artist._id : "";
 
   return (
@@ -95,20 +123,23 @@ const TracksPage: React.FC = () => {
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 bg-zinc-950 border border-zinc-800 p-6 rounded-2xl shadow-lg">
           <img
             src={
-              album?.photo
+              album.photo
                 ? `http://localhost:3000/uploads/${album.photo}`
                 : "https://via.placeholder.com/300?text=No+Cover"
             }
-            alt={album?.name}
+            alt={album.name}
             className="w-40 h-40 rounded-xl object-cover border border-zinc-800 shadow-md"
           />
+
           <div className="text-center sm:text-left flex-1">
             <span className="text-xs uppercase tracking-wider text-zinc-300 font-semibold bg-zinc-900 px-3 py-1 rounded-full border border-zinc-800 font-mono">
-              Album &bull; {album?.year}
+              Album • {album.year}
             </span>
+
             <h1 className="text-3xl font-extrabold text-white mt-3 tracking-tight">
-              {album?.name}
+              {album.name}
             </h1>
+
             {artist && (
               <p className="text-zinc-400 text-base font-medium mt-1">
                 Artist:{" "}
@@ -139,12 +170,21 @@ const TracksPage: React.FC = () => {
                   <span className="text-zinc-500 font-mono w-6 text-right">
                     {track.number}.
                   </span>
+
                   <span className="text-white font-medium">{track.name}</span>
+
+                  {!track.isPublished && (
+                    <span className="text-xs text-red-400 font-mono border border-red-400/30 px-2 py-1 rounded">
+                      Unpublished
+                    </span>
+                  )}
                 </div>
+
                 <div className="flex items-center gap-4">
                   <span className="text-sm text-zinc-400 font-mono">
                     {track.duration}
                   </span>
+
                   {user && (
                     <button
                       onClick={() => handlePlay(track)}
@@ -152,6 +192,15 @@ const TracksPage: React.FC = () => {
                       className="bg-white text-black text-xs font-bold px-4 py-1.5 rounded-full hover:bg-zinc-200 transition-colors cursor-pointer disabled:opacity-50"
                     >
                       {playingTrackId === track._id ? "Playing..." : "Play"}
+                    </button>
+                  )}
+
+                  {user?.role === "admin" && (
+                    <button
+                      onClick={() => handleDeleteTrack(track._id)}
+                      className="bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-3 py-1.5 rounded"
+                    >
+                      Delete
                     </button>
                   )}
                 </div>

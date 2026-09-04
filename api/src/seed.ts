@@ -20,19 +20,16 @@ const run = async () => {
     console.log("Collections are empty or not found, skipping this drops.");
   }
 
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash("kyro", salt);
-
   const [adminUser, regularUser] = await Promise.all([
     User.create({
       username: "admin",
-      password: hashedPassword,
+      password: "admin",
       token: randomUUID(),
       role: "admin",
     }),
     User.create({
       username: "baiteli",
-      password: hashedPassword,
+      password: "kyro",
       token: randomUUID(),
       role: "user",
     }),
@@ -284,7 +281,7 @@ const run = async () => {
   const album5 = await Album.create({
     name: "0",
     artist: artist3._id,
-    year: 2026,
+    year: 2024,
     photo: "cowboyclickeralbumzero.jpg",
     isPublished: false,
     user: regularUser._id,

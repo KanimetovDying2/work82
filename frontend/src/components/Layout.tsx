@@ -32,6 +32,27 @@ const Layout: React.FC = () => {
           <div className="flex items-center gap-4">
             {user ? (
               <>
+                <div className="hidden md:flex items-center gap-2 mr-2">
+                  <Link
+                    to="/artists/add"
+                    className="text-xs font-mono text-zinc-400 hover:text-white transition-colors bg-zinc-900 px-2.5 py-1 rounded border border-zinc-800/80"
+                  >
+                    + Artist
+                  </Link>
+                  <Link
+                    to="/albums/add"
+                    className="text-xs font-mono text-zinc-400 hover:text-white transition-colors bg-zinc-900 px-2.5 py-1 rounded border border-zinc-800/80"
+                  >
+                    + Album
+                  </Link>
+                  <Link
+                    to="/tracks/add"
+                    className="text-xs font-mono text-zinc-400 hover:text-white transition-colors bg-zinc-900 px-2.5 py-1 rounded border border-zinc-800/80"
+                  >
+                    + Track
+                  </Link>
+                </div>
+
                 <Link
                   to="/track_histories"
                   className="text-sm font-mono text-zinc-300 hover:text-white transition-colors bg-zinc-900 px-3 py-1.5 rounded-lg border border-zinc-800"
@@ -73,7 +94,7 @@ const Layout: React.FC = () => {
       </main>
 
       <footer className="bg-zinc-950 border-t border-zinc-800 text-center py-4 text-xs font-mono text-zinc-500">
-        Requrate &bull; 2026
+        RequRate &bull; 2026
       </footer>
     </div>
   );
